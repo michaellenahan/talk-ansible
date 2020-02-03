@@ -52,6 +52,9 @@
 							Michael Lenahan<br/>
 							<span style="color:black">Hubert Burda Media</span>
 						</p>
+						<p style="background:aliceblue;color:#b14d4d;box-shadow:13px 13px black;">
+							<a href="https://github.com/michaellenahan/talk-ansible">https://github.com/michaellenahan/talk-ansible</a>
+						</p>
 					</div>
 				</section>
 
@@ -168,6 +171,7 @@
 
 				<section>
 					<h3>Our solution (since 2019)</h3>
+					<p class="fragment">Own the infrastructure and have it all in code</p>
 					<p class="fragment">Work with a managed hosting provider</p>
 					<p class="fragment">Define our own services, based on our own needs</p>
 					<p class="fragment">75% reduction in hosting costs</p>
@@ -223,33 +227,17 @@
         database01.test
 					</pre>
 				</section>
+
+				<section>
+					<h3>Ad-hoc commands</h3>
+					<p>ping module</p>
+					<a href="https://docs.ansible.com/ansible/latest/modules/ping_module.html">docs.ansible.com/ansible/latest/modules/ping_module.html</a>
+					<p>command module</p>
+					<a href="https://docs.ansible.com/ansible/latest/modules/command_module.html">docs.ansible.com/ansible/latest/modules/command_module.html</a>
+				</section>
 					<!-- Easy to get started.
 				Ad-hoc command, e.g. "df -h", reload php-fpm after deployment
 
-				Doesn't have limitations, can
-					<h3>Playbook example</h3>
-					- hosts: lamp
-  gather_facts: yes
-
-  vars_files:
-    - vars/main.yml
-
-  roles:
-    - geerlingguy.firewall
-    - geerlingguy.ntp
-    - geerlingguy.mysql
-    - geerlingguy.apache
-    - geerlingguy.php
-    - geerlingguy.php-mysql
-				</section>
-
-				Ansible-Galaxy
-
-				Task example - modules notify
-
-				<section>
-					<h3>Inventory (hosts) example</h3>
-				</section>
 
 Other cool features
 - Secrets management (Vault, 1Password ...)
@@ -267,6 +255,7 @@ https://docs.ansible.com/ansible/latest/modules/modules_by_category.html
 					<h2>Jeff Geerling's book</h2>
 					<p><img src="images/ansible-for-devops-400.png"></p>
 				</section>
+
 			</div>
 
 		</div>

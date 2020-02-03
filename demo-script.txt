@@ -1,0 +1,61 @@
+demo-script
+
+We have 3 VMs running.
+For the purposes of this demo, it makes no difference that these servers are local.
+They can just as easily be somewhere on the web.
+
+ping website01.test
+ping website02.test
+ping database01.test
+
+We use the inventory file to tell Ansible about our servers.
+
+ansible -i inventory.yml all -m ping
+ansible -i inventory.yml databases -m command -a "df -h"
+ansible -i inventory.yml websites -m command -a "lsb_release -a"
+
+The point here is that we can use the inventory to run commands against groups of servers.
+We never need to SSH in to the servers again!
+There are even commands to start and stop services, like apache.
+
+OK, so now we are ready to build a playbook which will provision our servers with useful software.
+Let's install apache2 on the webservers.
+We can use this ansible role:
+https://github.com/geerlingguy/ansible-role-apache
+
+Now, let's build a playbook.
+    ---
+    # playbook.yml
+    - hosts: websites
+      become: true
+      roles:
+        - role: geerlingguy.apache
+
+Now run the playbook:
+    $ ansible-playbook -i inventory.yml playbook.yml
+
+Check the output.
+Check the browser - we should now see the default apache page here:
+http://website01.test/
+http://website02.test/
+
+Let's create our own role, to copy an index.html over to the webservers.
+
+Show:
+roles/websites/tasks/main.yml
+roles/websites/templates/main.yml
+
+Run the playbook again:
+    $ ansible-playbook -i inventory.yml playbook.yml
+
+We expect it to fail - AnsibleUndefinedVariable
+
+Uncomment the website_name variables in inventory.yml
+
+Show in the browsers, that the index.html files have changed.
+
+Oh no. The project manager has just found a bug in the title of Website 2, so let's fix that:
+... change the website_name for website02
+
+Ansible kept a backup for us.
+ansible -i inventory.yml websites -m command -a "ls /var/www/html/"

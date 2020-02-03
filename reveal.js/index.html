@@ -47,7 +47,7 @@
 					<h2 style="background:aliceblue;color:#b14d4d;box-shadow:13px 13px black;">Take control of your hosting using Ansible</h2>
 					<!-- <p style="color: #eee8d5;"> -->
 					<div style="set-align:center">
-						<p>
+						<p style="background:aliceblue;color:#b14d4d;box-shadow:13px 13px black;">
 							Andre Baumeier<br/>
 							Michael Lenahan
 						</p>
@@ -55,19 +55,9 @@
 				</section>
 
 				<section>
-					<h3>Our situation (before 2019)</h3>
-					<p class="fragment">Hosting with expensive "cloud solutions" provider with vendor lock-in</p>
-					<p class="fragment">Poor performance</p>
-					<p class="fragment">Inflexible, "one size fits all", leading to expensive workarounds</p>
-				</section>
-
-				<section>
-					<h3>Our solution (since 2019)</h3>
-					<p class="fragment">Work with a managed hosting provider</p>
-					<p class="fragment">Define our own services, based on our own needs</p>
-					<p class="fragment">75% reduction in hosting costs</p>
-					<p class="fragment">Better performance</p>
-					<p class="fragment">Better developer experience</p>
+					<h3>Taking control of your technical environment</h3>
+					<p><img src="images/ansible-for-devops-400.png"></a></p>
+					<p><img src="images/ansible-logo.png"></a></p>
 				</section>
 
 				<section>
@@ -168,10 +158,61 @@
 				</section>
 
 				<section>
-					<h3>Taking control of your technical environment</h3>
-					<p><img src="images/ansible-for-devops-400.png"></a></p>
-					<p><img src="images/ansible-logo.png"></a></p>
+					<h3>Our situation (before 2019)</h3>
+					<p class="fragment">Hosting with expensive "cloud solutions" provider with vendor lock-in</p>
+					<p class="fragment">Poor performance</p>
+					<p class="fragment">Inflexible, "one size fits all", leading to expensive workarounds</p>
 				</section>
+
+				<section>
+					<h3>Our solution (since 2019)</h3>
+					<p class="fragment">Work with a managed hosting provider</p>
+					<p class="fragment">Define our own services, based on our own needs</p>
+					<p class="fragment">75% reduction in hosting costs</p>
+					<p class="fragment">Better performance</p>
+					<p class="fragment">Better developer experience</p>
+				</section>
+
+				<section>
+					<h3>Why Ansible?</h3>
+					<p>Comparable products: Puppet, Chef, Saltstack</p>
+					<p>No server setup needed (only server requirement is Python)</p>
+					<p>Connect using SSH and runs scripts on server</p>
+					<p>Scripts can be run over and over again without side-effects</p>
+					<p>Easy to learn, very well documented. Stable API</p>
+				</section>
+
+				<section>
+					Easy to get started.
+				Ad-hoc command, e.g. "df -h", reload php-fpm after deployment
+
+				Doesn't have limitations, can 
+					<h3>Playbook example</h3>
+					- hosts: lamp
+  gather_facts: yes
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - geerlingguy.firewall
+    - geerlingguy.ntp
+    - geerlingguy.mysql
+    - geerlingguy.apache
+    - geerlingguy.php
+    - geerlingguy.php-mysql
+				</section>
+
+				Ansible-Galaxy
+
+				Task example - modules notify
+
+				<section>
+					<h3>Inventory (hosts) example</h3>
+				</section>
+
+
+
 
 				<section>
 					<h2>Thanks!</h2>

@@ -1,0 +1,7 @@
+---
+# roles/websites/tasks/main.yml
+- name: "Template a file to /var/www/html/index.html"
+  template: >
+    src=index.html.j2
+    dest=/var/www/html/index.html
+    mode=0777

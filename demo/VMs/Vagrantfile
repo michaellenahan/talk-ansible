@@ -1,0 +1,39 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# This Vagrantfile is copied from the example in Jeff Geerling's book, "Ansible for DevOps"
+# https://github.com/geerlingguy/ansible-for-devops/blob/7c5569c6e0158fa27dcfbf99e8f17c298849351c/orchestration/Vagrantfile
+# I made the following changes:
+# - Using ubuntu1804 box instead of centos7
+# - Using 'website' and 'database' as names
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # General Vagrant VM configuration.
+  config.vm.box = "geerlingguy/ubuntu1804"
+  config.ssh.insert_key = false
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.provider :virtualbox do |v|
+    v.memory = 256
+    v.linked_clone = true
+  end
+
+  # Website 1.
+  config.vm.define "website01" do |server|
+    server.vm.hostname = "website01.test"
+    server.vm.network :private_network, ip: "192.168.60.4"
+  end
+
+  # Website 2.
+  config.vm.define "website02" do |server|
+    server.vm.hostname = "website02.test"
+    server.vm.network :private_network, ip: "192.168.60.5"
+  end
+
+  # Database server.
+  config.vm.define "database01" do |server|
+    server.vm.hostname = "database01.test"
+    server.vm.network :private_network, ip: "192.168.60.6"
+  end
+end

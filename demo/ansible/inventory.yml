@@ -1,0 +1,16 @@
+---
+all:
+  vars:
+    ansible_ssh_user: vagrant
+    ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+    ansible_python_interpreter: python3
+websites:
+  hosts:
+    website01.test:
+      website_name: "Website Number One, The First and the Best"
+    website02.test:
+      # website_name: "Website Number Two, A bit better (TM) than Website Number One"
+      website_name: "Website Number Two, Actually exactly the same as Website Number One"
+databases:
+  hosts:
+    database01.test:

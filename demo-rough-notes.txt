@@ -1,0 +1,211 @@
+10075  2020-02-03 14:29  vagrant up
+10076  2020-02-03 14:31  ping webserver01.test
+10077  2020-02-03 14:31  ping webserver02.test
+10078  2020-02-03 14:31  ping database01.test
+10079  2020-02-03 14:32  ssh vagrant@database01.test
+10080  2020-02-03 14:33  ssh -i ~/.vagrant.d/insecure_private_key vagrant@database01.test
+10081  2020-02-03 14:33  ssh -i ~/.vagrant.d/insecure_private_key vagrant@webserver01.test
+10082  2020-02-03 14:33  ssh -i ~/.vagrant.d/insecure_private_key vagrant@webserver02.test
+
+https://docs.ansible.com/ansible/latest/user_guide/intro_inventory.html
+
+---
+all:
+  vars:
+    ansible_ssh_user: vagrant
+    ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+    ansible_python_interpreter: python3
+webservers:
+  hosts:
+    webserver01.test:
+    webserver02.test:
+  vars:
+databases:
+  hosts:
+    database01.test:
+
+    $ ansible -i inventory.yml all -a "df -h"
+    Warning: the ECDSA host key for 'webserver01.test' differs from the key for the IP address '192.168.60.4'
+    Offending key for IP in /Users/d440377/.ssh/known_hosts:20
+    Matching host key in /Users/d440377/.ssh/known_hosts:86
+    Are you sure you want to continue connecting (yes/no)? Warning: the ECDSA host key for 'webserver02.test' differs from the key for the IP address '192.168.60.5'
+    Offending key for IP in /Users/d440377/.ssh/known_hosts:21
+    Matching host key in /Users/d440377/.ssh/known_hosts:87
+    Are you sure you want to continue connecting (yes/no)? Warning: the ECDSA host key for 'database01.test' differs from the key for the IP address '192.168.60.6'
+    Offending key for IP in /Users/d440377/.ssh/known_hosts:22
+    Matching host key in /Users/d440377/.ssh/known_hosts:85
+    Are you sure you want to continue connecting (yes/no)? yes
+    Please type 'yes' or 'no': yes
+    Please type 'yes' or 'no': yes
+    Please type 'yes' or 'no': yes
+    Please type 'yes' or 'no': yes
+
+    $ ansible -i inventory.yml websites -m ping
+    The authenticity of host 'website02.test (192.168.60.5)' can't be established.
+    ECDSA key fingerprint is SHA256:iVrRiZ5TPLQY8tC1Ymra4mqFMVQSHpOnZXUnr2CXHuI.
+    Are you sure you want to continue connecting (yes/no)? The authenticity of host 'website01.test (192.168.60.4)' can't be established.
+    ECDSA key fingerprint is SHA256:iVrRiZ5TPLQY8tC1Ymra4mqFMVQSHpOnZXUnr2CXHuI.
+    Are you sure you want to continue connecting (yes/no)? yes
+    Please type 'yes' or 'no': yes
+    Please type 'yes' or 'no': yes
+    Please type 'yes' or 'no': ^C [ERROR]: User interrupted execution
+
+    $ ansible -i inventory.yml websites -m ping --forks=1
+    The authenticity of host 'website01.test (192.168.60.4)' can't be established.
+    ECDSA key fingerprint is SHA256:iVrRiZ5TPLQY8tC1Ymra4mqFMVQSHpOnZXUnr2CXHuI.
+    Are you sure you want to continue connecting (yes/no)? yes
+    Warning: the ECDSA host key for 'website01.test' differs from the key for the IP address '192.168.60.4'
+    Offending key for IP in /Users/d440377/.ssh/known_hosts:20
+    Are you sure you want to continue connecting (yes/no)? yes
+    website01.test | SUCCESS => {
+        "changed": false,
+        "ping": "pong"
+    }
+    The authenticity of host 'website02.test (192.168.60.5)' can't be established.
+    ECDSA key fingerprint is SHA256:iVrRiZ5TPLQY8tC1Ymra4mqFMVQSHpOnZXUnr2CXHuI.
+    Are you sure you want to continue connecting (yes/no)? yes
+    Warning: the ECDSA host key for 'website02.test' differs from the key for the IP address '192.168.60.5'
+    Offending key for IP in /Users/d440377/.ssh/known_hosts:21
+    Are you sure you want to continue connecting (yes/no)? yes
+    website02.test | SUCCESS => {
+        "changed": false,
+        "ping": "pong"
+    }
+
+Using the ping module
+https://docs.ansible.com/ansible/latest/modules/ping_module.html
+
+    $ ansible -i inventory.yml websites -m ping
+    website01.test | SUCCESS => {
+        "changed": false,
+        "ping": "pong"
+    }
+    website02.test | SUCCESS => {
+        "changed": false,
+        "ping": "pong"
+    }
+
+    $ ansible -i inventory.yml databases -m ping
+    database01.test | SUCCESS => {
+        "changed": false,
+        "ping": "pong"
+    }
+
+Using the command module
+https://docs.ansible.com/ansible/latest/modules/command_module.html
+
+    $ ansible -i inventory.yml websites -m command -a "df -h"
+    website02.test | CHANGED | rc=0 >>
+    Filesystem                    Size  Used Avail Use% Mounted on
+    udev                           87M     0   87M   0% /dev
+    tmpfs                          23M  576K   23M   3% /run
+    /dev/mapper/vagrant--vg-root   78G  1.8G   72G   3% /
+    tmpfs                         115M     0  115M   0% /dev/shm
+    tmpfs                         5.0M     0  5.0M   0% /run/lock
+    tmpfs                         115M     0  115M   0% /sys/fs/cgroup
+    tmpfs                          23M     0   23M   0% /run/user/900
+
+    website01.test | CHANGED | rc=0 >>
+    Filesystem                    Size  Used Avail Use% Mounted on
+    udev                           87M     0   87M   0% /dev
+    tmpfs                          23M  576K   23M   3% /run
+    /dev/mapper/vagrant--vg-root   78G  1.8G   72G   3% /
+    tmpfs                         115M     0  115M   0% /dev/shm
+    tmpfs                         5.0M     0  5.0M   0% /run/lock
+    tmpfs                         115M     0  115M   0% /sys/fs/cgroup
+    tmpfs                          23M     0   23M   0% /run/user/900
+
+OK, so now we are ready to build a playbook which will provision our servers with useful software.
+Let's install apache2 on the webservers.
+We can use this ansible role:
+https://github.com/geerlingguy/ansible-role-apache
+
+An easy way to download this role is to use the ansible-galaxy command, which comes bundled with Ansible.
+    $ ansible-galaxy --roles-path=roles install geerlingguy.apache
+
+This installs the code into the directory `roles/geerlingguy.apache`.
+
+Now, let's build a playbook.
+    ---
+    - hosts: websites
+      become: true
+      roles:
+        - role: geerlingguy.apache
+
+Now run the playbook:
+    $ ansible-playbook -i inventory.yml playbook.yml
+
+The playbook run looks like this:
+reveal.js/images/ansible-playbook-install-apache.png
+reveal.js/images/ansible-playbook-install-apache-recap.png
+
+Note that we have only changed the websites, the database server was not touched, because the database was not included in the playbook.
+
+OK. Now we have apache installed on the website servers:
+reveal.js/images/ansible-playbook-apache-installed.png
+
+Let's create our own role, to copy an index.html over to the webservers.
+To do this, create a tasks and a templates folder (you can use geerlingguy.apache as an example of how a role is structured).
+    $ mkdir -p roles/websites/{tasks,templates}
+
+Create and edit a `roles/websites/tasks/main.yml` file.
+In our task, we will use the template module
+https://docs.ansible.com/ansible/latest/modules/template_module.html
+
+---
+# roles/websites/tasks/main.yml
+- name: "Template a file to /var/www/html/index.html"
+  template: >
+    src=index.html.j2
+    dest=/var/www/html/index.html
+    mode=0777
+
+Add the websites role to the playbook:
+---
+# playbook.yml
+- hosts: websites
+  become: true
+  roles:
+    - role: geerlingguy.apache
+    - role: websites
+
+Run the playbook, we get an error
+$ ansible-playbook -i inventory.yml playbook.yml
+```
+TASK [websites : Template a file to /var/www/html/index.html] ****************************************************************************************************************************************************************************************************************
+fatal: [website01.test]: FAILED! => {"changed": false, "msg": "AnsibleUndefinedVariable: 'website_name' is undefined"}
+fatal: [website02.test]: FAILED! => {"changed": false, "msg": "AnsibleUndefinedVariable: 'website_name' is undefined"}
+```
+
+Makes sense, we forgot to define the `website_name` variable.
+There are lots of places you can set variables, it's all well documented.
+https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html
+What we are going to do now is set the variables in `inventory.yml`:
+```
+websites:
+  hosts:
+    website01.test:
+      website_name: "Website Number One, The First and the Best"
+    website02.test:
+      website_name: "Website Number Two, A bit better (TM) than Website Number One"
+```
+
+Oh no. The project manager has just found a bug in the title of Website 2, so let's fix that:
+```
+websites:
+  hosts:
+    website01.test:
+      website_name: "Website Number One, The First and the Best"
+    website02.test:
+      # website_name: "Website Number Two, A bit better (TM) than Website Number One"
+      website_name: "Website Number Two, Actually exactly the same as Website Number One"
+```
+
+Now, when we run the playbook again, we see that website02.test is updated, but website01.test stays the same:
+
+
+
+Resources
+Reddit ansible channel
+https://old.reddit.com/r/ansible/comments/ev0hfk/for_those_beginning_a_simple_minecraft_server/
+https://github.com/chadgeary/minecraft/blob/master/minecraft.yml

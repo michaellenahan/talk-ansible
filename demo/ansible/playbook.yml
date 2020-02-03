@@ -1,0 +1,7 @@
+---
+# playbook.yml
+- hosts: websites
+  become: true
+  roles:
+    - role: geerlingguy.apache
+    - role: websites

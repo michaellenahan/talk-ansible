@@ -77,14 +77,8 @@ body {
  * OTHER
  *********************************************/
  .reveal p {
-   color: darkorange;
-   background: aliceblue;
-   color: #b14d4d;
-   box-shadow: 13px 13px black;
    margin: 20px 0;
    line-height: 1.3;
-   display: inline-block;
-   padding: 10px 20px 10px 20px;
    }
 /* Ensure certain elements are never larger than the slide itself */
 .reveal img,

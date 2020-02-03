@@ -4,4 +4,5 @@
   template: >
     src=index.html.j2
     dest=/var/www/html/index.html
-    mode=0777
+    mode=0644
+    backup=yes

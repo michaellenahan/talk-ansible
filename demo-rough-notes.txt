@@ -40,6 +40,13 @@ databases:
     Please type 'yes' or 'no': yes
     Please type 'yes' or 'no': yes
 
+"Fixed" in ansible.cfg
+[defaults]
+# This turns off host key checking. Good for demo, but not good in production.
+host_key_checking = False
+
+* Show the inventory.yml file
+
     $ ansible -i inventory.yml websites -m ping
     The authenticity of host 'website02.test (192.168.60.5)' can't be established.
     ECDSA key fingerprint is SHA256:iVrRiZ5TPLQY8tC1Ymra4mqFMVQSHpOnZXUnr2CXHuI.
@@ -114,6 +121,13 @@ https://docs.ansible.com/ansible/latest/modules/command_module.html
     tmpfs                         5.0M     0  5.0M   0% /run/lock
     tmpfs                         115M     0  115M   0% /sys/fs/cgroup
     tmpfs                          23M     0   23M   0% /run/user/900
+
+Since we have ubuntu servers, we can use this command to check the current Ubuntu version:
+    $ ansible -i inventory.yml all -m command -a "lsb_release -a"
+
+The point here is that we can use the inventory to run commands against groups of servers.
+We never need to SSH in to the servers again!
+There are even commands to start and stop services, like apache.
 
 OK, so now we are ready to build a playbook which will provision our servers with useful software.
 Let's install apache2 on the webservers.
@@ -202,8 +216,20 @@ websites:
 ```
 
 Now, when we run the playbook again, we see that website02.test is updated, but website01.test stays the same:
+... see screenshots:
+ansible-playbook-website02-name-change-recap.png
+ansible-playbook-website02-name-change-browser.png
 
+... and I have a backup
+➜  ansible git:(master) ✗ ansible -i inventory.yml websites -m command -a "ls /var/www/html/"
+website02.test | CHANGED | rc=0 >>
+index.html
+index.html.4101.2020-02-03@16:25:00~
+index.html.4441.2020-02-03@16:26:27~
 
+website01.test | CHANGED | rc=0 >>
+index.html
+index.html.3557.2020-02-03@16:23:56~
 
 Resources
 Reddit ansible channel

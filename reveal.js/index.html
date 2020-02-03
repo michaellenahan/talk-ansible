@@ -49,19 +49,21 @@
 					<div style="set-align:center">
 						<p style="background:aliceblue;color:#b14d4d;box-shadow:13px 13px black;">
 							Andre Baumeier<br/>
-							Michael Lenahan
+							Michael Lenahan<br/>
+							<span style="color:black">Hubert Burda Media</span>
 						</p>
 					</div>
 				</section>
 
 				<section>
-					<h3>Taking control of your technical environment</h3>
-					<p><img src="images/ansible-for-devops-400.png"></a></p>
-					<p><img src="images/ansible-logo.png"></a></p>
+					<h3>Take back control™ of your technical environment</h3>
+					<p><img src="images/ansible-logo.png"></p>
 				</section>
 
 				<section>
+					<p>We are the internal development team at ...</p>
 					<h1>Burda Home</h1>
+					<p>... we host and manage these websites ...</p>
 				</section>
 
 				<section>
@@ -175,18 +177,56 @@
 
 				<section>
 					<h3>Why Ansible?</h3>
-					<p>Comparable products: Puppet, Chef, Saltstack</p>
-					<p>No server setup needed (only server requirement is Python)</p>
-					<p>Connect using SSH and runs scripts on server</p>
-					<p>Scripts can be run over and over again without side-effects</p>
-					<p>Easy to learn, very well documented. Stable API</p>
+					<p class="fragment">We compared it with: Puppet, Chef, Saltstack</p>
+					<p class="fragment">✅ No server setup needed (only server req is Python)</p>
+					<p class="fragment">✅ Connects using SSH and runs scripts on server</p>
+					<p class="fragment">✅ Scripts can be run over and over again</p>
+					<p class="fragment">✅ Easy to learn, very well documented. Stable API</p>
 				</section>
 
 				<section>
-					Easy to get started.
+					<h3>🤪 DEMO TIME! 🤪</h3>
+					<p>Follow along by going to the demo directory in this repo</p>
+				</section>
+
+				<section>
+					<h3>(1) Get 3 VMs running</h3>
+					<p>3 empty ubuntu1804 boxes</p>
+					<code>
+						cd demo/VMs && vagrant up
+					</code>
+				</section>
+
+				<section>
+					<h3>(2) Tell Ansible about your servers</h3>
+					<p>... in an inventory.yml file ...</p>
+					<code>
+						cd demo/ansible && cat inventory.yml
+					</code>
+				</section>
+
+				<section>
+					<p>ansible/inventory.yml</p>
+					<pre>
+    ---
+    all:
+      vars:
+        ansible_ssh_user: vagrant
+        ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
+        ansible_python_interpreter: python3
+    websites:
+      hosts:
+        website01.test:
+        website02.test:
+    databases:
+      hosts:
+        database01.test
+					</pre>
+				</section>
+					<!-- Easy to get started.
 				Ad-hoc command, e.g. "df -h", reload php-fpm after deployment
 
-				Doesn't have limitations, can 
+				Doesn't have limitations, can
 					<h3>Playbook example</h3>
 					- hosts: lamp
   gather_facts: yes
@@ -211,13 +251,21 @@
 					<h3>Inventory (hosts) example</h3>
 				</section>
 
+Other cool features
+- Secrets management (Vault, 1Password ...)
+- Ansible Tower/Ansible AWX (Control Server/GUI)
+https://github.com/ansible/awx
+- Vagrant integration for local development
+- Docker
 
-
-
+Final slide
+Ansible is modular.
+Ansible is mature technology.
+https://docs.ansible.com/ansible/latest/modules/modules_by_category.html
+ -->
 				<section>
-					<h2>Thanks!</h2>
-					<p>andre.baumeier@burda.com</p>
-					<p>michael.lenahan@burda.com</p>
+					<h2>Jeff Geerling's book</h2>
+					<p><img src="images/ansible-for-devops-400.png"></p>
 				</section>
 			</div>
 
